@@ -28,3 +28,26 @@ The goal is to handle multiple incoming requests by grouping them into batches a
 | 150         | 1.10 sec         | **0.1 - 0.15** sec |
 
 ## How to Use
+
+```python
+class BERTProxy(tessadar.Proxy[str, float]):
+    def __init__(self, batch_size=64):
+        super().__init__(batch_size=batch_size)
+        self.device = torch.device("cuda")
+        print(f"Using device: {self.device}")
+        self.tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
+        self.model = BertForSequenceClassification.from_pretrained("bert-base-uncased").to(self.device)
+        self.model.eval()
+
+    async def _inference(self, arguments: list[str]) -> list[float]:
+        texts = list(arguments)
+        inputs = self.tokenizer(
+            texts, return_tensors="pt", padding=True, truncation=True
+        )
+        inputs = {k: v.to(self.device) for k, v in inputs.items()}
+        with torch.no_grad():
+            outputs = self.model(**inputs)
+        logits = outputs.logits
+        probabilities = torch.softmax(logits, dim=-1)
+        return probabilities.cpu().tolist()
+```
