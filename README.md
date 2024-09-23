@@ -1,4 +1,4 @@
-from example.loadtest import bert_proxy
+from typing_extensions import overridefrom example.loadtest import bert_proxy
 
 # GPU Inference Batch Processing with Asyncio
 
@@ -40,7 +40,8 @@ class BERTProxy(tessadar.Proxy[str, float]):
         self.tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
         self.model = BertForSequenceClassification.from_pretrained("bert-base-uncased").to(self.device)
         self.model.eval()
-
+    
+    @override
     async def _inference(self, arguments: list[str]) -> list[float]:
         texts = list(arguments)
         inputs = self.tokenizer(
@@ -56,5 +57,6 @@ class BERTProxy(tessadar.Proxy[str, float]):
     
 async def main():
     bert_proxy = BERTProxy()
+    # plz be aware that the below example has no underscore '_'
     await bert_proxy.inference("this is a test text.")
 ```
