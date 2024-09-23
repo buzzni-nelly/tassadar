@@ -1,3 +1,5 @@
+from example.loadtest import bert_proxy
+
 # GPU Inference Batch Processing with Asyncio
 
 ## Overview
@@ -50,4 +52,9 @@ class BERTProxy(tessadar.Proxy[str, float]):
         logits = outputs.logits
         probabilities = torch.softmax(logits, dim=-1)
         return probabilities.cpu().tolist()
+
+    
+async def main():
+    bert_proxy = BERTProxy()
+    await bert_proxy.inference("this is a test text.")
 ```
