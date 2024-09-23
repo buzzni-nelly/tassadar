@@ -1,16 +1,23 @@
-from typing_extensions import overridefrom example.loadtest import bert_proxy
+# Batch Inference Toolkit
 
-# GPU Inference Batch Processing with Asyncio
+Batch Inference Toolkit(batch-inference) is a Python package that batches model input tensors coming from multiple requests dynamically, executes the model, un-batches output tensors and then returns them back to each request respectively. This will improve system throughput because of better compute parallelism and better cache locality. The entire process is transparent to developers. 
 
-## Overview
+## When to use
 
-The goal is to handle multiple incoming requests by grouping them into batches and processing each batch efficiently using GPU resources. By using `asyncio`, we can handle asynchronous requests and batch them without blocking the main event loop, optimizing GPU utilization and reducing overhead.
+When you want to host Deep Learning model inference on Cloud servers, especially on GPU
+It also works for cpu mode too!
 
-## Benefits
+## Why to use
 
-- **Efficiency**: Batch processing reduces the overhead per request, making the use of GPU resources more efficient.
-- **Scalability**: The system can handle a large number of concurrent requests, which is critical in high-demand environments.
-- **Flexibility**: The batch size and other parameters can be adjusted based on the workload and GPU capacity, allowing for dynamic scaling.
+It can improve your server throughput up to multiple times
+
+## Advantage of batch-inference
+
+* Platform independent lightweight python library
+* Only few lines code change is needed to onboard using built-in
+* Flexible APIs to support customized batching algorithms and input types
+* Support to avoid python GIL bottleneck
+* Tutorials and benchmarks on popular models:
 
 ## Benchmark
 #### bert-large-uncased
